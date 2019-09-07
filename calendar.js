@@ -1,10 +1,3 @@
-/**
- * MYNT-Calendar
- * Author  : Yugeta.Koji
- * History : 2019.09.03 (after ver 3)
- * Howto   :
- */
-
 ;$$calendar = (function(){
   var __event = function(target, mode, func){
 		if (target.addEventListener){target.addEventListener(mode, func, false)}
@@ -155,8 +148,8 @@
     this.options = this.initOptions(options);
 
     // css
-    this.setCSS();
-    this.setHTML();
+    this.setCSS();  // set-link-tag
+    this.setHTML(); // load-template
 
     // view-event-set
     var targets = document.querySelectorAll(this.options.target);
@@ -168,6 +161,7 @@
           this.calendar(dateArr);
           this.view(e);
         }).bind(this));
+        this.defaultBlank(targets[i]);
       }
     }
     
@@ -576,6 +570,14 @@
     return str;
   };
 
+  // ページ起動時にフォームがブランクの場合にoptionに沿って代入する
+  $$.prototype.defaultBlank = function(target){
+    if(!target){return}
+    if(target.value !== ""){return}
+    var res = this.getDateValue();
+    if(!res){return}
+    target.value = this.convDateFormat(res);
+  };
 
   return $$;
 })();
