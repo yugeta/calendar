@@ -137,6 +137,47 @@
 		}
   };
 
+  // デフォルト設定
+  var __options = {
+    target : ".input-date",   // 起動（表示）タイミングのエレメント（input=text , button ...)
+    start_event : "focus",  // [click , focus]
+    default_date_type   : "today" ,      // [blank:未入力 , today:ブランクの場合に当日の日付 , string:任意（指定）の値 , query:url-queryの任意の値]
+    default_date_string : "2019/08/01",  // [type=string:yyyy/mm/dd , type=query:date]
+
+    margin_top : "4px", // カレンダーを下にずらすマージン値
+    view_position : "element-bottom", // [center:画面中央 , element-bottom:基点の直下]
+    view_type : "", // []
+
+    flg_date_active : "past", // [all:未来過去すべての日付選択可能 , past:過去のみ選択可能 , future:未来のみ選択可能]
+    format_output : "yyyy/mm/dd", // [yyyy/mm/dd , yyyy/m/d , yyyy-m-d]
+
+    // element-hierarchy
+    dom : {
+      base   : ".calendar",
+        table  : ".calendar-table",
+        head   : ".calendar-head",
+          title  : ".calendar-title",
+            year   : ".calendar-year",
+            month  : ".calendar-month",
+            prev   : ".calendar-table .calendar-title .prev",
+            next   : ".calendar-table .calendar-title .next",
+          week   : ".calendar-week",
+        body   : ".calendar-body",
+          date : ".date",
+        foot : ".calendar-foot",
+          today : ".today",
+          close : ".close"
+    },
+
+    currentView : true,
+    date : {
+      y : null,
+      m : null,
+      d : null
+    },
+    selected : function(){}
+  };
+
 
 
 
@@ -232,52 +273,13 @@
 
   
 
-  // デフォルト設定
-  $$.prototype.options_setting = {
-    target : ".input-date",   // 起動（表示）タイミングのエレメント（input=text , button ...)
-    start_event : "focus",  // [click , focus]
-    default_date_type   : "today" ,      // [blank:未入力 , today:ブランクの場合に当日の日付 , string:任意（指定）の値 , query:url-queryの任意の値]
-    default_date_string : "2019/08/01",  // [type=string:yyyy/mm/dd , type=query:date]
-
-    margin_top : "4px", // カレンダーを下にずらすマージン値
-    view_position : "element-bottom", // [center:画面中央 , element-bottom:基点の直下]
-    view_type : "", // []
-
-    flg_date_active : "past", // [all:未来過去すべての日付選択可能 , past:過去のみ選択可能 , future:未来のみ選択可能]
-    format_output : "yyyy/mm/dd", // [yyyy/mm/dd , yyyy/m/d , yyyy-m-d]
-
-    // element-hierarchy
-    dom : {
-      base   : ".calendar",
-        table  : ".calendar-table",
-        head   : ".calendar-head",
-          title  : ".calendar-title",
-            year   : ".calendar-year",
-            month  : ".calendar-month",
-            prev   : ".calendar-table .calendar-title .prev",
-            next   : ".calendar-table .calendar-title .next",
-          week   : ".calendar-week",
-        body   : ".calendar-body",
-          date : ".date",
-        foot : ".calendar-foot",
-          today : ".today",
-          close : ".close"
-    },
-
-    currentView : true,
-    date : {
-      y : null,
-      m : null,
-      d : null
-    },
-    click_date : function(){}
-  };
+  
 
   $$.prototype.initOptions = function(options){
-    if(!options){return this.options_setting}
+    if(!options){return __options;}
     var res = {};
-    for(var i in this.options_setting){
-      res[i] = this.options_setting[i];
+    for(var i in __options){
+      res[i] = __options[i];
     }
     for(var i in options){
       res[i] = options[i];
@@ -553,6 +555,11 @@
 
     // close（強制終了）
     setTimeout((function(e){this.close(e)}).bind(this),100);
+
+    // 任意処理の実行
+    if(this.options.selected){
+      this.options.selected(current);
+    }
   };
 
   $$.prototype.convDateFormat = function(dateArr){

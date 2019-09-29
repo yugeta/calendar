@@ -9,14 +9,19 @@
 <body>
   <h1>Calendar</h1>
   <input type="text" name="date" placeholder="Date-input" style="border:1px solid #ccc;">
+  <div class="calendar-view">
 
+  </div>
 
 <script>
 new $$calendar({
   target : "[name='date']",
   start_event : "focus",
   default_date_type   : "today",
-  default_date_string : "date"
+  default_date_string : "date",
+  selected : function(res){
+console.log(res);
+  }
 });
 </script>
 </body>
