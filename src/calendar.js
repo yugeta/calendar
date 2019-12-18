@@ -178,6 +178,38 @@
     selected : function(){}
   };
 
+  //指定したエレメントの座標を取得
+	var __pos = function(e,t){
+
+		//エレメント確認処理
+		if(!e){return null;}
+
+		//途中指定のエレメントチェック（指定がない場合はbody）
+		if(typeof(t)=='undefined' || t==null){
+			t = document.body;
+		}
+
+		//デフォルト座標
+		var pos={x:0,y:0};
+		do{
+			//指定エレメントでストップする。
+			if(e == t){break}
+
+			//対象エレメントが存在しない場合はその辞典で終了
+			if(typeof(e)=='undefined' || e==null){return pos;}
+
+			//座標を足し込む
+			pos.x += e.offsetLeft;
+			pos.y += e.offsetTop;
+		}
+
+		//上位エレメントを参照する
+		while(e = e.offsetParent);
+
+		//最終座標を返す
+		return pos;
+	};
+
 
 
 
@@ -205,6 +237,8 @@
         this.defaultBlank(targets[i]);
       }
     }
+
+    // __event(window , "resize" , (function(e){this.view("resize");}).bind(this));
     
   };
 
@@ -290,6 +324,16 @@
 
 
   $$.prototype.view = function(e){
+    // if(e === "resize"){
+    //   var calendar = document.querySelector("calendar");
+    //   if(!calendar){return}
+    //   if(calendar.getAttribute("data-view") !== "1"){return;}
+    //   var target = document.activeElement;
+    //   if(!target || target.tagName !== "INPUT"){return}
+    // }
+    // else{
+    //   var target = e.target;
+    // }
     var target = e.target;
     if(!target){return}
 
@@ -304,20 +348,25 @@
 
       case "element-bottom":
         var bounce = target.getBoundingClientRect();
-        var top  = bounce.top  + bounce.height + document.body.scrollTop;
+        var pos = __pos(target);
+
+        // var top  = bounce.top  + bounce.height + document.body.scrollTop;
+        var top  = pos.y  + bounce.height - document.body.scrollTop;
+        // var top  = bounce.top  + bounce.height;
         var left = bounce.left + document.body.scrollLeft;
-        // 縦にはみ出す場合は、下付き
-        if(top + table.offsetHeight > window.innerHeight){
-          top = window.innerHeight - table.offsetHeight;
-        }
+        // // 縦にはみ出す場合は、下付き
+        // if(top + table.offsetHeight > window.innerHeight){
+        //   top = window.innerHeight - table.offsetHeight;
+        // }
         // 横にはみ出す場合はセンター表示
-        if(left + table.offsetWidth > window.innerWidth){
-          left = (window.innerWidth / 2) - (table.offsetWidth / 2);
-        }
+        // if(left + table.offsetWidth > window.innerWidth){
+        //   left = (window.innerWidth / 2) - (table.offsetWidth / 2);
+        // }
         pos.top  = top;
         pos.left = left;
         break;
     }
+// console.log(top+","+left);
     table.style.setProperty("top"  , pos.top  + "px" , "");
     table.style.setProperty("left" , pos.left + "px" , "");
 
