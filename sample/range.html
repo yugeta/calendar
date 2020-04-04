@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>calendars</title>
+  <style>
+    .range1,.range2{
+      padding:8px;
+      width:200px;
+      font-size:14px;
+      text-align:center;
+    }
+  </style>
+  <script src="../src/main.min.js"></script>
+</head>
+<body>
+  <input class="range1" type="text" name="calendar-date" value="">
+  <input class="range2" type="text" name="calendar-date" value="">
+
+  <script>
+    new $$calendars({
+      target      : ".range1 , .range2",
+      mode        : "range",
+      start_event : "focus",
+      date_type   : "today",
+      date_string : -7,
+      view_date   : 1,
+      format_output : "yyyy-mm-dd",
+      click       : function(e){console.log(e);},
+      select      : function(e){console.log(e);}
+    });
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>calendars</title>
+  <style>
+    .date{
+      padding:8px;
+      width:200px;
+      font-size:14px;
+      text-align:center;
+    }
+  </style>
+  <script src="../src/main.js"></script>
+</head>
+<body>
+  <input class="date" type="text" name="calendar-date" value="">
+
+  <input class="date" type="text" name="calendar-date2" value="">
+
+  <script>
+    new $$calendars({
+      target      : ".date",
+      start_event : "focus",
+      date_type   : "today",
+      button_ok : true,
+      click       : function(e){console.log("click-1");console.log(e);},
+      select      : function(e){console.log("select-1");console.log(e);}
+    });
+  </script>
+</body>
+</html>
